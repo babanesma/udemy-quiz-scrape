@@ -13,6 +13,7 @@ def parse_questions(file_path):
     html_file = import_dumped_quiz_html(file_path)
     questions = []
     question_form_selector = CSSSelector("div.detailed-result-panel--panel-row--2aE8z")
+    i = 1
     for question_group in question_form_selector(html_file):
         # fetch question text
         question_selector = CSSSelector("div#question-prompt")
@@ -35,16 +36,17 @@ def parse_questions(file_path):
             answers.append(answer)
 
         # append question to list of questions
-        question = Question(question_text, answers)
+        question = Question(f"{i}. {question_text}", answers)
         questions.append(question)
+        i += 1
 
     return questions
 
 
 if __name__ == "__main__":
-    questions = parse_questions(
-        "exam practices/Practice Exams _ AWS Certified Cloud Practitioner CLF-C01_02 _ Udemy.html"
-    )
-    quiz = Quiz("AWS Certified Cloud Practitioner CLF-C01_02", questions)
-
-    
+    for i in range(1, 7):
+        questions = parse_questions(
+            f"exam practices/practice {i}.html"
+        )
+        quiz = Quiz(f"practice {i}", questions)
+        quiz.export_to_csv(f"./out/aws_practice_{i}_exam_results.csv")
