@@ -41,7 +41,7 @@ class Quiz:
         q_row["Question"] = question.question_text
         correct_answer = []
         for i, answer in enumerate(question.possible_answers):
-            answer_header = f"Answer {i + 1}"
+            answer_header = f"Answer {str(i).zfill(2) + 1}"
             q_row[answer_header] = answer.answer_text
             if answer.correct:
                 correct_answer.append(answer_header)
